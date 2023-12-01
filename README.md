@@ -113,9 +113,3 @@ export const part2 = () => {
 | 23  |        |        |                               | [Day 23](https://adventofcode.com/2023/day/23) |
 | 24  |        |        |                               | [Day 24](https://adventofcode.com/2023/day/24) |
 | 25  |        |        |                               | [Day 25](https://adventofcode.com/2023/day/25) |
-| 26  |        |        |                               | [Day 26](https://adventofcode.com/2023/day/26) |
-| 27  |        |        |                               | [Day 27](https://adventofcode.com/2023/day/27) |
-| 28  |        |        |                               | [Day 28](https://adventofcode.com/2023/day/28) |
-| 29  |        |        |                               | [Day 29](https://adventofcode.com/2023/day/29) |
-| 30  |        |        |                               | [Day 30](https://adventofcode.com/2023/day/30) |
-| 31  |        |        |                               | [Day 31](https://adventofcode.com/2023/day/31) |
