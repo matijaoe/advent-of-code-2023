@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "target": "esnext",
+    "jsx": "react-jsx",
+    "lib": ["ESNext"],
+    "moduleDetection": "force",
+    "baseUrl": "./src",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "paths": {
+      "io": ["utils/io.ts"],
+      "utils": ["utils/index.ts"],
+      "utils/*": ["utils/*"],
+      "models": ["models/index.ts"],
+      "models/*": ["models/*"]
+    },
+    "types": [
+      "bun-types" // add Bun global
+    ],
+    "allowImportingTsExtensions": true,
+    "allowJs": true,
+    "strict": true,
+    "downlevelIteration": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  }
+}

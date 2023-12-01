@@ -1,0 +1,24 @@
+{
+  "name": "advent-of-code-2023",
+  "type": "module",
+  "author": {
+    "name": "Matija Osrečki",
+    "url": "https://github.com/matijaoe/advent-of-code-2023"
+  },
+  "module": "index.ts",
+  "scripts": {
+    "day": "bun run ./src/scripts/run-day.ts",
+    "setup": "bun run ./src/scripts/setup-day.ts",
+    "lint": "eslint .",
+    "format": "eslint . --fix"
+  },
+  "dependencies": {
+    "typescript": "^5.3.2"
+  },
+  "devDependencies": {
+    "@matijaoe/eslint-config": "^1.2.0",
+    "bun-types": "latest",
+    "chalk": "^5.3.0",
+    "eslint": "^8.54.0"
+  }
+}
