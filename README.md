@@ -36,6 +36,11 @@ Run day solutions:
 bun day 1
 ```
 
+Run day solutions in dev mode (without clearing console outputs):
+```bash
+bun day 1 --dev
+```
+
 For automatic puzzle input retrieval, define `.env` file with `session` cookie from [adventofcode.com](https://adventofcode.com):
 ```env
 SESSION=
