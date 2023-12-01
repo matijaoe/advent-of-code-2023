@@ -86,17 +86,17 @@ export const part2 = () => {
 ## Days
 ✅ / ❌
 
-| Day | Part 1 | Part 2 | Solution                      | Advent of Code link                                   |
-| --- | ------ | ------ | ----------------------------- | ------------------------------------------ |
-| 01  |        |        | [Link](./src/day-01/index.ts) | [Day 01](https://adventofcode.com/2023/day/1) |
-| 02  |        |        |                               | [Day 02](https://adventofcode.com/2023/day/2) |
-| 03  |        |        |                               | [Day 03](https://adventofcode.com/2023/day/3) |
-| 04  |        |        |                               | [Day 04](https://adventofcode.com/2023/day/4) |
-| 05  |        |        |                               | [Day 05](https://adventofcode.com/2023/day/5) |
-| 06  |        |        |                               | [Day 06](https://adventofcode.com/2023/day/6) |
-| 07  |        |        |                               | [Day 07](https://adventofcode.com/2023/day/7) |
-| 08  |        |        |                               | [Day 08](https://adventofcode.com/2023/day/8) |
-| 09  |        |        |                               | [Day 09](https://adventofcode.com/2023/day/9) |
+| Day | Part 1 | Part 2 | Solution                      | Advent of Code link                            |
+| --- | ------ | ------ | ----------------------------- | ---------------------------------------------- |
+| 01  | ✅      |        | [Link](./src/day-01/index.ts) | [Day 01](https://adventofcode.com/2023/day/1)  |
+| 02  |        |        |                               | [Day 02](https://adventofcode.com/2023/day/2)  |
+| 03  |        |        |                               | [Day 03](https://adventofcode.com/2023/day/3)  |
+| 04  |        |        |                               | [Day 04](https://adventofcode.com/2023/day/4)  |
+| 05  |        |        |                               | [Day 05](https://adventofcode.com/2023/day/5)  |
+| 06  |        |        |                               | [Day 06](https://adventofcode.com/2023/day/6)  |
+| 07  |        |        |                               | [Day 07](https://adventofcode.com/2023/day/7)  |
+| 08  |        |        |                               | [Day 08](https://adventofcode.com/2023/day/8)  |
+| 09  |        |        |                               | [Day 09](https://adventofcode.com/2023/day/9)  |
 | 10  |        |        |                               | [Day 10](https://adventofcode.com/2023/day/10) |
 | 11  |        |        |                               | [Day 11](https://adventofcode.com/2023/day/11) |
 | 12  |        |        |                               | [Day 12](https://adventofcode.com/2023/day/12) |
