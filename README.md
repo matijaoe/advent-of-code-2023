@@ -88,7 +88,7 @@ export const part2 = () => {
 
 | Day | Part 1 | Part 2 | Solution                      | Advent of Code link                            |
 | --- | ------ | ------ | ----------------------------- | ---------------------------------------------- |
-| 01  | ✅      |        | [Link](./src/day-01/index.ts) | [Day 01](https://adventofcode.com/2023/day/1)  |
+| 01  | ✅      | ✅      | [Link](./src/day-01/index.ts) | [Day 01](https://adventofcode.com/2023/day/1)  |
 | 02  |        |        |                               | [Day 02](https://adventofcode.com/2023/day/2)  |
 | 03  |        |        |                               | [Day 03](https://adventofcode.com/2023/day/3)  |
 | 04  |        |        |                               | [Day 04](https://adventofcode.com/2023/day/4)  |

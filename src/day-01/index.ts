@@ -1,15 +1,8 @@
+/* eslint-disable no-cond-assign */
 import { parseLines, readInput } from 'io'
 import { sum } from 'utils'
 
 const input = await readInput('day-01')
-// const input = `two1nine
-// eightwothree
-// abcone2threexyz
-// xtwone3four
-// 4nineeightseven2
-// zoneight234
-// 7pqrstsixteen
-// `
 
 export const part1 = () => {
   const lines = parseLines(input)
@@ -47,17 +40,22 @@ export const part2 = () => {
   const regex = new RegExp(`\\d|${numStrings.join('|')}`, 'g')
 
   const values = lines.map((line) => {
-    const matched = line.match(regex)
-    if (!matched) {
+    const matches: string[] = []
+    let match = null
+    while ((match = regex.exec(line)) !== null) {
+      matches.push(match.at(0)!)
+      regex.lastIndex = match?.index + 1
+    }
+
+    if (!matches.length) {
       return null
     }
 
-    const first = matched.at(0)!
-    const last = matched.at(-1)!
+    const first = matches.at(0)!
+    const last = matches.at(-1)!
 
     const converted = [first, last]
       .map((match) => {
-        console.log(match)
         if (/\d/.test(match)) {
           return match
         }
@@ -65,7 +63,7 @@ export const part2 = () => {
       })
 
     return converted.join('')
-  }).map(Number)
+  }).filter(Boolean).map(Number)
 
   return sum(values)
 }
