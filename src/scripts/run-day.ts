@@ -21,7 +21,7 @@ const runDay = async (day: number) => {
   const [one, onePerformance] = withPerformance(() => part1?.())
   const [two, twoPerformance] = withPerformance(() => part2?.())
 
-  // console.clear()
+  console.clear()
 
   console.log(
     '🌲',
