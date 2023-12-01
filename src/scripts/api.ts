@@ -6,6 +6,7 @@ const headers = {
 
 export const fetchInput = ({ day, year }: { day: number; year?: number }) => {
   if (!year) {
+    // eslint-disable-next-line no-param-reassign
     year = new Date().getFullYear()
   }
   return fetch(`https://adventofcode.com/${year}/day/${day}/input`, {
