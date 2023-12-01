@@ -1,6 +1,5 @@
-/* eslint-disable no-cond-assign */
 import { parseLines, readInput } from 'io'
-import { sum } from 'utils'
+import { reverseString, sum } from 'utils'
 
 const input = await readInput('day-01')
 
@@ -21,7 +20,7 @@ export const part1 = () => {
   return sum(values)
 }
 
-export const part2 = () => {
+const part2_a = () => {
   const numbersMap = {
     one: 1,
     two: 2,
@@ -42,6 +41,7 @@ export const part2 = () => {
   const values = lines.map((line) => {
     const matches: string[] = []
     let match = null
+    // eslint-disable-next-line no-cond-assign
     while ((match = regex.exec(line)) !== null) {
       matches.push(match.at(0)!)
       regex.lastIndex = match?.index + 1
@@ -59,6 +59,9 @@ export const part2 = () => {
         if (/\d/.test(match)) {
           return match
         }
+        if (!match) {
+          return null
+        }
         return numbersMap[match as keyof typeof numbersMap].toString()
       })
 
@@ -67,3 +70,56 @@ export const part2 = () => {
 
   return sum(values)
 }
+
+// Alternative solution, but much slower
+// eslint-disable-next-line unused-imports/no-unused-vars
+const part2_b = () => {
+  const numbersMap = {
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    six: 6,
+    seven: 7,
+    eight: 8,
+    nine: 9,
+  }
+
+  const lines = parseLines(input)
+
+  const values = lines.map((line) => {
+    const numStrings = Object.keys(numbersMap)
+    const regexStart = new RegExp(`\\d|${numStrings.join('|')}`, 'g')
+
+    const numStringsReversed = Object.keys(numbersMap).map((key) => reverseString(key))
+    const regexEnd = new RegExp(`\\d|${numStringsReversed.join('|')}`, 'g')
+
+    const first = line.match(regexStart)?.at(0) ?? null
+    const last = reverseString(line).match(regexEnd)?.at(0) ?? null
+
+    if (!first || !last) {
+      return null
+    }
+
+    const converted = [first, last]
+      .map((match) => {
+        if (/\d/.test(match)) {
+          return match
+        }
+        if (!match) {
+          return null
+        }
+        if (numStrings.includes(match)) {
+          return numbersMap[match as keyof typeof numbersMap].toString()
+        }
+        return numbersMap[reverseString(match) as keyof typeof numbersMap].toString()
+      })
+
+    return converted.join('')
+  }).filter(Boolean).map(Number)
+
+  return sum(values)
+}
+
+export const part2 = part2_a

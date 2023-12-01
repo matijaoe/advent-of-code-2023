@@ -32,3 +32,11 @@ export const desc = <T extends number | string>(a: T, b: T): number => {
 export const isBetween = (x: number, [min, max]: [number, number]) => {
   return x >= min && x <= max
 }
+
+export const reverseString = (input: string): string => {
+  let reversed = ''
+  for (let i = input.length - 1; i >= 0; i--) {
+    reversed += input[i]
+  }
+  return reversed
+}
