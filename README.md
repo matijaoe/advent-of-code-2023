@@ -1,5 +1,4 @@
-# Advent of Code 2023
-
+# 🎄 Advent of Code 2023
 
 ![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=for-the-badge&logo=bun&logoColor=white) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)
@@ -89,12 +88,12 @@ export const part2 = () => {
 
 
 ## Days
-✅ / ❌
+⭐ / ❌
 
 | Day | Part 1 | Part 2 | Solution                      | Advent of Code link                            |
 | --- | ------ | ------ | ----------------------------- | ---------------------------------------------- |
-| 01  | ✅      | ✅      | [Link](./src/day-01/index.ts) | [Day 01](https://adventofcode.com/2023/day/1)  |
-| 02  |        |        |                               | [Day 02](https://adventofcode.com/2023/day/2)  |
+| 01  | ⭐      | ⭐      | [Link](./src/day-01/index.ts) | [Day 01](https://adventofcode.com/2023/day/1)  |
+| 02  | ⭐      | ⭐      | [Link](./src/day-02/index.ts) | [Day 02](https://adventofcode.com/2023/day/2)  |
 | 03  |        |        |                               | [Day 03](https://adventofcode.com/2023/day/3)  |
 | 04  |        |        |                               | [Day 04](https://adventofcode.com/2023/day/4)  |
 | 05  |        |        |                               | [Day 05](https://adventofcode.com/2023/day/5)  |

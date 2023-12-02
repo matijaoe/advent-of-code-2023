@@ -1,23 +1,16 @@
 import { parseLines, readInput } from 'io'
-import { sum } from 'utils'
+import { multiply, sum } from 'utils'
 
 const input = await readInput('day-02', 'input')
 
 type Color = 'red' | 'green' | 'blue'
+type GameStr = `Game ${number}`
+type RoundStr = `${number} ${Color}`
+type GameRoundRecord = Record<Color, number>
+type ColorEntry = [Color, number]
 
-export const part1 = () => {
-  const lines = parseLines(input)
-  const requirement: Record<Color, number> = {
-    red: 12,
-    green: 13,
-    blue: 14,
-  }
-
-  type GameRoundRecord = Record<Color, number>
-  type GameStr = `Game ${number}`
-  type RoundStr = `${number} ${Color}`
-
-  const games = lines.reduce((acc, line) => {
+const parseGames = (lines: string[]) => {
+  return lines.reduce((acc, line) => {
     const [game, roundsRaw] = line.split(': ') as [GameStr, string]
 
     const gameNum = (game.split(' ').at(1)!)
@@ -28,7 +21,7 @@ export const part1 = () => {
         const [count, color] = curr.split(' ') as [string, Color]
         acc[color] = Number.parseInt(count)
         return acc
-      }, {} as Record<Color, number>)
+      }, {} as GameRoundRecord)
       return gameRoundRecord
     })
 
@@ -36,17 +29,52 @@ export const part1 = () => {
 
     return acc
   }, {} as Record<string, GameRoundRecord[]>)
+}
+
+const isRoundImpossible = (round: GameRoundRecord, requirement: GameRoundRecord) => {
+  const entries = (Object.entries(round) as ColorEntry[])
+  return entries.some(([color, count]) => {
+    return count > requirement[color]
+  })
+}
+
+const calcRoundMinRequirements = (acc: GameRoundRecord, round: GameRoundRecord) => {
+  const roundEntries = Object.entries(round) as ColorEntry[]
+  roundEntries.forEach(([color, count]) => {
+    acc[color] ??= 0
+    acc[color] = Math.max(acc[color], count)
+  })
+  return acc
+}
+
+export const part1 = () => {
+  const lines = parseLines(input)
+  const games = parseGames(lines)
+
+  const requirement: GameRoundRecord = {
+    red: 12,
+    green: 13,
+    blue: 14,
+  }
 
   const possibleGames = Object.keys(games).filter((gameNum) => {
     const gameNotPossible = games[gameNum].some((round) => {
-      const isImpossible = (Object.entries(round) as [Color, number][])
-        .some(([color, count]) => {
-          return count > requirement[color]
-        })
-      return isImpossible
+      return isRoundImpossible(round, requirement)
     })
     return !gameNotPossible
   }).map(Number)
 
   return sum(possibleGames)
+}
+
+export const part2 = () => {
+  const lines = parseLines(input)
+  const games = parseGames(lines)
+
+  const gamesMinRequirements = Object.values(games).map((rounds) => {
+    return rounds.reduce(calcRoundMinRequirements, {} as GameRoundRecord)
+  })
+
+  const gamesPowers = gamesMinRequirements.map(Object.values).map(multiply)
+  return sum(gamesPowers)
 }

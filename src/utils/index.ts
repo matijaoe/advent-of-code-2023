@@ -7,6 +7,10 @@ export const sum = (numbers: number[]) => {
   return numbers.reduce((sum, num) => sum + num, 0)
 }
 
+export const multiply = (numbers: number[]) => {
+  return numbers.reduce((sum, num) => sum * num, 1)
+}
+
 export const unique = (arr: any[]) => {
   return [...new Set(arr)]
 }
