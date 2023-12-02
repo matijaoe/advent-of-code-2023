@@ -1,7 +1,11 @@
 import { parseLines, readInput } from 'io'
 import { multiply, sum } from 'utils'
 
-const input = await readInput('day-02', 'input')
+const input = await readInput('day-02')
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// ------------------------- Shared ---------------------------
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 type Color = 'red' | 'green' | 'blue'
 type GameStr = `Game ${number}`
@@ -9,42 +13,38 @@ type RoundStr = `${number} ${Color}`
 type GameRoundRecord = Record<Color, number>
 type ColorEntry = [Color, number]
 
+const parseRounds = (roundsRaw: string): GameRoundRecord[] => {
+  return roundsRaw.split('; ').map((round) => {
+    const roundColors = round.split(', ') as RoundStr[]
+    const gameRoundRecord = roundColors.reduce((acc, curr) => {
+      const [count, color] = curr.split(' ') as [string, Color]
+      acc[color] = Number.parseInt(count)
+      return acc
+    }, {} as GameRoundRecord)
+    return gameRoundRecord
+  })
+}
+
 const parseGames = (lines: string[]) => {
   return lines.reduce((acc, line) => {
     const [game, roundsRaw] = line.split(': ') as [GameStr, string]
+    const gameNum = game.split(' ').at(1)!
 
-    const gameNum = (game.split(' ').at(1)!)
-
-    const roundsMap = roundsRaw.split('; ').map((round) => {
-      const roundColors = round.split(', ') as RoundStr[]
-      const gameRoundRecord = roundColors.reduce((acc, curr) => {
-        const [count, color] = curr.split(' ') as [string, Color]
-        acc[color] = Number.parseInt(count)
-        return acc
-      }, {} as GameRoundRecord)
-      return gameRoundRecord
-    })
-
-    acc[gameNum] = roundsMap
+    acc[gameNum] = parseRounds(roundsRaw)
 
     return acc
   }, {} as Record<string, GameRoundRecord[]>)
 }
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// ------------------------- Part 1 ---------------------------
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 const isRoundImpossible = (round: GameRoundRecord, requirement: GameRoundRecord) => {
   const entries = (Object.entries(round) as ColorEntry[])
   return entries.some(([color, count]) => {
     return count > requirement[color]
   })
-}
-
-const calcRoundMinRequirements = (acc: GameRoundRecord, round: GameRoundRecord) => {
-  const roundEntries = Object.entries(round) as ColorEntry[]
-  roundEntries.forEach(([color, count]) => {
-    acc[color] ??= 0
-    acc[color] = Math.max(acc[color], count)
-  })
-  return acc
 }
 
 export const part1 = () => {
@@ -65,6 +65,19 @@ export const part1 = () => {
   }).map(Number)
 
   return sum(possibleGames)
+}
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// ------------------------- Part 2 ---------------------------
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+const calcRoundMinRequirements = (acc: GameRoundRecord, round: GameRoundRecord) => {
+  const roundEntries = Object.entries(round) as ColorEntry[]
+  roundEntries.forEach(([color, count]) => {
+    acc[color] ??= 0
+    acc[color] = Math.max(acc[color], count)
+  })
+  return acc
 }
 
 export const part2 = () => {

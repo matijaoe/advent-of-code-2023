@@ -3,6 +3,10 @@ import { reverseString, sum } from 'utils'
 
 const input = await readInput('day-01')
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// ------------------------- Part 1 ---------------------------
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 export const part1 = () => {
   const lines = parseLines(input)
 
@@ -20,19 +24,23 @@ export const part1 = () => {
   return sum(values)
 }
 
-const part2_a = () => {
-  const numbersMap = {
-    one: 1,
-    two: 2,
-    three: 3,
-    four: 4,
-    five: 5,
-    six: 6,
-    seven: 7,
-    eight: 8,
-    nine: 9,
-  }
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// ------------------------- Part 2 ---------------------------
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+const numbersMap = {
+  one: 1,
+  two: 2,
+  three: 3,
+  four: 4,
+  five: 5,
+  six: 6,
+  seven: 7,
+  eight: 8,
+  nine: 9,
+}
+
+const part2_a = () => {
   const lines = parseLines(input)
 
   const numStrings = Object.keys(numbersMap)
@@ -72,20 +80,7 @@ const part2_a = () => {
 }
 
 // Alternative solution, but much slower
-// eslint-disable-next-line unused-imports/no-unused-vars
-const part2_b = () => {
-  const numbersMap = {
-    one: 1,
-    two: 2,
-    three: 3,
-    four: 4,
-    five: 5,
-    six: 6,
-    seven: 7,
-    eight: 8,
-    nine: 9,
-  }
-
+const _part2_b = () => {
   const lines = parseLines(input)
 
   const values = lines.map((line) => {
