@@ -1,7 +1,7 @@
 import { parseLines, readInput } from 'io'
-import { sum } from 'utils'
+import { isNumber, multiply, sum } from 'utils'
 
-const input = await readInput('day-03', 'example-my')
+const input = await readInput('day-03', 'example')
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // ------------------------- Part 1 ---------------------------
@@ -14,10 +14,10 @@ const processAdjacentLine = (adjLine: string, match: RegExpMatchArray, foundMatc
 
   const symbolsRegex = /[^a-zA-Z0-9.]/g
 
-  const firstIndex = Math.max(match.index - 1, 0)
-  const lastIndex = Math.min(match.index + foundMatch.length + 1, adjLine.length - 1)
+  const startIdx = Math.max(match.index - 1, 0)
+  const endIdx = Math.min(match.index + foundMatch.length + 1, adjLine.length - 1)
 
-  const lineSubstr = adjLine.slice(firstIndex, lastIndex)
+  const lineSubstr = adjLine.slice(startIdx, endIdx)
   const substrIncludesSymbol = symbolsRegex.test(lineSubstr)
   if (substrIncludesSymbol) {
     return Number(foundMatch)
@@ -87,6 +87,49 @@ export const part1 = () => {
 // ------------------------- Part 2 ---------------------------
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+const processGearAdjacentLineBefore = (adjLine: string, match: RegExpMatchArray) => {
+  if (match?.index == null) {
+    return null
+  }
+
+  const numbersRegex = /(\d+)$/g
+
+  const startIdx = 0
+  const endIdx = Math.min(match.index + 1, adjLine.length - 1)
+
+  const lineSubstr = adjLine.slice(startIdx, endIdx)
+  const numberMatch = lineSubstr.match(numbersRegex)
+  console.log(lineSubstr, numberMatch)
+  if (numberMatch) {
+    const match = numberMatch.at(0)!
+    return Number(match)
+  }
+  return null
+}
+const processGearAdjacentLineAfter = (adjLine: string, match: RegExpMatchArray) => {
+  if (match?.index == null) {
+    return null
+  }
+
+  // stars with number, or stars with number form 2nd char
+  // ideally it would be done with lookahead, instead of replacing
+  // this also matches *number, but i just cant anymore
+  const numbersRegex = /(?:\*?\d+\*?)|(?<=\*)\d+|(?=\*)\d+/g
+
+  const startIdx = match.index
+  const endIdx = adjLine.length - 1
+
+  const lineSubstr = adjLine.slice(startIdx, endIdx)
+  const numberMatch = lineSubstr.match(numbersRegex)
+  console.log(lineSubstr, numberMatch)
+  if (numberMatch) {
+    const match = numberMatch.at(0)!.replace(/\*/g, '')
+    // replace all non numbers with empty
+    return Number(match)
+  }
+  return null
+}
+
 export const part2 = () => {
   const lines = parseLines(input)
 
@@ -94,9 +137,9 @@ export const part2 = () => {
   const asteriskAfterNumberRegex = /(?:^\*?\d+\*?$|\d+(?=\*)|\d+(?<=\*))/g
   const asteriskBeforeNumberRegex = /(?:^\*?\d+\*?$|(?<=\*)\d+|(?=\*)\d+$)/g
 
-  const gearRatios: Array<number[]> = []
+  const singleGearNumbers: Array<number[]> = []
 
-  lines.forEach((line, _lineIdx) => {
+  lines.forEach((line, lineIdx) => {
     let match = null
 
     while ((match = asteriskRegex.exec(line)) !== null) {
@@ -107,6 +150,7 @@ export const part2 = () => {
 
       // current line
       if (match.index > 0) {
+        console.log(`\n${lineIdx}.`, line)
         const lineSubstr = line.slice(0, Math.min(match.index + 1, line.length - 1))
         const numberMatch = lineSubstr.match(asteriskAfterNumberRegex)
         if (numberMatch) {
@@ -127,11 +171,58 @@ export const part2 = () => {
         }
       }
 
-      if (currentGearRatio.length === 2) {
-        gearRatios.push(currentGearRatio)
+      // previous line
+      if (lineIdx > 0) {
+        const prevLine = lines.at(lineIdx - 1)!
+        const gearNumberBefore = processGearAdjacentLineBefore(prevLine, match)
+        if (gearNumberBefore) {
+          console.log('[prev line] gearNumberBefore :', gearNumberBefore)
+          currentGearRatio.push(gearNumberBefore)
+          asteriskRegex.lastIndex += gearNumberBefore.toString().length
+        }
+        const gearNumberAfter = processGearAdjacentLineAfter(prevLine, match)
+        if (gearNumberAfter) {
+          console.log('[prev line] gearNumberAfter :', gearNumberAfter)
+          currentGearRatio.push(gearNumberAfter)
+          asteriskRegex.lastIndex += gearNumberAfter.toString().length
+        }
+
+        if (/\d/g.test(prevLine[match.index])) {
+          currentGearRatio.filter((n) => n !== Number(prevLine[match!.index]))
+        }
+      }
+
+      // next line
+      if (lineIdx < lines.length - 1) {
+        const nextLine = lines.at(lineIdx + 1)!
+        const gearNumberBefore = processGearAdjacentLineBefore(nextLine, match)
+        if (gearNumberBefore) {
+          console.log('[next line] gearNumberBefore :', gearNumberBefore)
+          currentGearRatio.push(gearNumberBefore)
+          asteriskRegex.lastIndex += gearNumberBefore.toString().length
+        }
+        const gearNumberAfter = processGearAdjacentLineAfter(nextLine, match)
+        if (gearNumberAfter) {
+          console.log('[next line] gearNumberAfter :', gearNumberAfter)
+          currentGearRatio.push(gearNumberAfter)
+          asteriskRegex.lastIndex += gearNumberAfter.toString().length
+        }
+
+        if (/\d/g.test(nextLine[match.index])) {
+          currentGearRatio.filter((n) => n !== Number(nextLine[match!.index]))
+        }
+      }
+
+      console.log(currentGearRatio, currentGearRatio.length)
+      if (currentGearRatio.every((n) => !Number.isNaN(n)) && currentGearRatio.length === 2) {
+        // singleGearNumbers.push(multiply(currentGearRatio))
+        singleGearNumbers.push(currentGearRatio)
       }
     }
   })
 
-  return gearRatios
+  console.log('singleGearNumbers :', singleGearNumbers)
+  return sum(singleGearNumbers.map(multiply))
 }
+
+console.log(part2())
