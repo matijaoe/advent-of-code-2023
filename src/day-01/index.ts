@@ -49,7 +49,7 @@ const part2_a = () => {
   const values = lines.map((line) => {
     const matches: string[] = []
     let match = null
-    // eslint-disable-next-line no-cond-assign
+
     while ((match = regex.exec(line)) !== null) {
       matches.push(match.at(0)!)
       regex.lastIndex = match?.index + 1
