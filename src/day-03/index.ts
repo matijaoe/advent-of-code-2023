@@ -1,7 +1,7 @@
 import { parseLines, readInput } from 'io'
 import { sum } from 'utils'
 
-const input = await readInput('day-03', 'input')
+const input = await readInput('day-03', 'example-my')
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // ------------------------- Part 1 ---------------------------
@@ -81,4 +81,57 @@ export const part1 = () => {
   })
 
   return sum(validNumbers)
+}
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// ------------------------- Part 2 ---------------------------
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+export const part2 = () => {
+  const lines = parseLines(input)
+
+  const asteriskRegex = /\*/g
+  const asteriskAfterNumberRegex = /(?:^\*?\d+\*?$|\d+(?=\*)|\d+(?<=\*))/g
+  const asteriskBeforeNumberRegex = /(?:^\*?\d+\*?$|(?<=\*)\d+|(?=\*)\d+$)/g
+
+  const gearRatios: Array<number[]> = []
+
+  lines.forEach((line, _lineIdx) => {
+    let match = null
+
+    while ((match = asteriskRegex.exec(line)) !== null) {
+      const foundMatch = match[0]
+      console.log(line, match.index)
+
+      const currentGearRatio: number[] = []
+
+      // current line
+      if (match.index > 0) {
+        const lineSubstr = line.slice(0, Math.min(match.index + 1, line.length - 1))
+        const numberMatch = lineSubstr.match(asteriskAfterNumberRegex)
+        if (numberMatch) {
+          const number = numberMatch.at(-1)
+          console.log('matched before', number)
+          currentGearRatio.push(Number(number))
+        }
+      }
+
+      const nextIndex = match.index + foundMatch.length
+      if (nextIndex < line.length) {
+        const lineSubstr = line.slice(match.index, line.length - 1)
+        const numberMatch = lineSubstr.match(asteriskBeforeNumberRegex)
+        if (numberMatch) {
+          const [number] = numberMatch
+          console.log('matched after', number)
+          currentGearRatio.push(Number(number))
+        }
+      }
+
+      if (currentGearRatio.length === 2) {
+        gearRatios.push(currentGearRatio)
+      }
+    }
+  })
+
+  return gearRatios
 }
