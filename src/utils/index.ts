@@ -15,6 +15,10 @@ export const unique = <T>(arr: T[]) => {
   return [...new Set(arr)]
 }
 
+export const intersection = (arr1: string[], arr2: string[]) => {
+  return arr1.filter((num) => arr2.includes(num))
+}
+
 export const asc = <T extends number | string>(a: T, b: T): number => {
   if (isNumber(a) && isNumber(b)) {
     return a - b
