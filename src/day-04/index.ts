@@ -1,5 +1,5 @@
 import { parseLines, readInput } from 'io'
-import { intersection, sum } from 'utils'
+import { intersection, mapEntries, mapValues, splitOnWhitespace, sum } from 'utils'
 
 const input = await readInput('day-04')
 
@@ -10,18 +10,18 @@ const input = await readInput('day-04')
 const countCardMatches = (lines: string[]) => {
   return lines.reduce((acc, line) => {
     const [cardMeta, lottery] = line.split(': ')
-    const [_, cardNumber] = cardMeta.split(/\s+/)
+    const [_, cardNumber] = splitOnWhitespace(cardMeta)
     const [winningNumbers, chosenNumbers] = lottery
       .trim()
       .split(' | ')
-      .map((str) => str.split(/\s+/))
+      .map(splitOnWhitespace)
 
     const matchCount = intersection(winningNumbers, chosenNumbers).length
 
-    acc[cardNumber] = matchCount
+    acc.set(cardNumber, matchCount)
 
     return acc
-  }, {} as Record<string, number>)
+  }, new Map<string, number>())
 }
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -32,7 +32,7 @@ export const part1 = () => {
   const lines = parseLines(input)
   const cardMatches = countCardMatches(lines)
 
-  return Object.values(cardMatches).reduce((acc, count) => {
+  return mapValues(cardMatches).reduce((acc, count) => {
     const points = 2 ** (count - 1)
     return acc + points
   }, 1)
@@ -65,9 +65,7 @@ export const part2 = () => {
     return acc
   }
 
-  const matchCountEntries = Object.entries(cardMatches) as Array<[string, number]>
-
-  const reduced = matchCountEntries.reduce((acc, [cardNumber, matchCount]) => {
+  const reduced = mapEntries(cardMatches).reduce((acc, [cardNumber, matchCount]) => {
     return addUpCards(acc, Number(cardNumber), matchCount)
   }, {} as Record<string, number>)
 

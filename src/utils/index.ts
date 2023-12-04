@@ -19,6 +19,18 @@ export const intersection = (arr1: string[], arr2: string[]) => {
   return unique(arr1.filter((num) => arr2.includes(num)))
 }
 
+export const splitOnWhitespace = (str: string) => {
+  return str.split(/\s+/)
+}
+
+export const mapEntries = <K, V>(map: Map<K, V>) => {
+  return [...map.entries()]
+}
+
+export const mapValues = <K, V>(map: Map<K, V>) => {
+  return [...map.values()]
+}
+
 export const asc = <T extends number | string>(a: T, b: T): number => {
   if (isNumber(a) && isNumber(b)) {
     return a - b
