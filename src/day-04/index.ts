@@ -1,7 +1,7 @@
 import { parseLines, readInput } from 'io'
-import { sum, unique } from 'utils'
+import { sum } from 'utils'
 
-const input = await readInput('day-04', 'example')
+const input = await readInput('day-04')
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // ------------------------- Shared ---------------------------
@@ -46,71 +46,36 @@ export const part1 = () => {
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 export const part2 = () => {
-  const lines = parseLines(input).slice(0, 30)
+  const lines = parseLines(input)
 
   const cardMatches = countCardMatches(lines)
-  /* {
-    "1": 4,
-    "2": 2,
-    "3": 2,
-    "4": 1,
-    "5": 0,
-    "6": 0
-  } */
 
-  const matchCountEntries = (Object.entries(cardMatches) as Array<[string, number]>).map(([cardNumberStr, count]) => [Number(cardNumberStr), count])
-
-  const calcStuff = (acc: Record<string, number>, cardNumber: number, count: number) => {
+  const addUpCards = (acc: Record<string, number>, cardNumber: number, count: number) => {
     acc[cardNumber] ??= 0
     acc[cardNumber] += 1
 
-    if (acc[cardNumber] === 0 || !(cardNumber in acc)) { return acc }
+    const nextCard = cardNumber + 1
 
-    const arr = unique(Array.from({ length: count }, (_, i) => i + 1 + cardNumber).filter((num) => num < lines.length))
-
-    arr.forEach((num) => {
-      acc[num] ??= 0
-      acc[num] += 1
-
-      return calcStuff(acc, num, count - 1)
-    })
+    let cardTotal = acc[cardNumber]
+    while (cardTotal > 0) {
+      const end = Math.min(count + cardNumber, lines.length)
+      for (let n = nextCard; n <= end; n++) {
+        acc[n] ??= 0
+        acc[n] += 1
+      }
+      cardTotal -= 1
+    }
 
     return acc
   }
 
-  const reduced = matchCountEntries.reduce((acc, [cardNumber, count]) => {
-    calcStuff(acc, cardNumber, count - 1)
-    // const arr = unique(Array.from({ length: count }, (_, i) => i + 1 + cardNumber).filter((num) => num < lines.length))
+  const matchCountEntries = (Object.entries(cardMatches) as Array<[string, number]>)
+    .map(([cardNumberStr, count]) => [Number(cardNumberStr), count])
 
-    // acc[cardNumber] ??= 0
-    // acc[cardNumber] += 1
-
-    // arr.forEach((card) => {
-    //   acc[card] ??= 0
-    //   acc[card] += 1
-
-    //   calcStuff(acc, card, count - 1)
-    //   // console.log(acc)
-    // })
-
+  const reduced = matchCountEntries.reduce((acc, [cardNumber, matchCount]) => {
+    addUpCards(acc, cardNumber, matchCount)
     return acc
   }, {} as Record<string, number>)
 
-  // console.log(reduced)
-
   return sum(Object.values(reduced))
 }
-
-// console.log(part2()) // 102592 too low
-
-/*
-expected:
-{
-  "1": 1,
-  "2": 2,
-  "3": 4,
-  "4": 8,
-  "5": 14,
-  "6": 1
-}
-*/
