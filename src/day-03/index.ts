@@ -87,6 +87,7 @@ export const part1 = () => {
 // ------------------------- Part 2 ---------------------------
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+// TODO: not solved
 const processGearAdjacentLineBefore = (adjLine: string, match: RegExpMatchArray) => {
   if (match?.index == null) {
     return null
@@ -224,5 +225,3 @@ export const part2 = () => {
   console.log('singleGearNumbers :', singleGearNumbers)
   return sum(singleGearNumbers.map(multiply))
 }
-
-console.log(part2())
