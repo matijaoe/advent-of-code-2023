@@ -11,7 +11,7 @@ export const multiply = (numbers: number[]) => {
   return numbers.reduce((sum, num) => sum * num, 1)
 }
 
-export const unique = (arr: any[]) => {
+export const unique = <T>(arr: T[]) => {
   return [...new Set(arr)]
 }
 

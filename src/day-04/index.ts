@@ -1,22 +1,28 @@
 import { parseLines, readInput } from 'io'
+import { unique } from 'utils'
 
-const input = await readInput('day-04', 'example')
+const input = await readInput('day-04', 'input')
 
 export const part1 = () => {
   const lines = parseLines(input)
-  // your code goes here
-  const mapped = lines.reduce((acc, line) => {
-    const [gameHead, lottery] = line.split(': ')
-    const gameNum = gameHead.split(' ').at(1)
-    const games = lottery.split(' | ')
-    console.log('Games', games)
-    const res = games.map((game) => {
-      console.log('game', game)
-      return game
-    })
-    acc[gameNum] = games
+
+  const total = lines.reduce((acc, line) => {
+    const [_, lottery] = line.split(': ')
+    const [winningNumbers, chosenNumbers] = lottery
+      .trim()
+      .split(' | ')
+      .map((str) => str.split(/\s+/).map(Number))
+
+    const myMatches = chosenNumbers.filter((num) => winningNumbers.includes(num))
+    const matchCount = myMatches.length
+
+    if (matchCount > 0) {
+      const points = 2 ** (matchCount - 1)
+      return acc + points
+    }
+
     return acc
-  }, {})
-  // console.log(mapped)
-  return mapped.toString()
+  }, 0)
+
+  return total
 }
