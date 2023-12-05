@@ -1,11 +1,20 @@
-import { parseGroups, parseLines, readInput } from 'io'
+import { parseGroups, readInput } from 'io'
+import { isBetween } from 'utils'
 
-const input = await readInput('day-05', 'example')
+const input = await readInput('day-05', 'input')
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// ------------------------- Shared ---------------------------
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 const parseSeeds = (line: string) => {
   const [,seedsStr] = line.split(': ')
   return seedsStr.split(' ').map(Number)
 }
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// ------------------------- Part 1 ---------------------------
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 export const part1 = () => {
   const [seedsLine, ...mapsGroups] = parseGroups(input)
@@ -25,19 +34,20 @@ export const part1 = () => {
     })
   })
 
-  // const finalSeeds = seeds.map((seed) => {
-  //   const newSeed = almanac.forEach((group) => {
-  //     group.forEach((item) => {
-  //       if (seed >= item.srcRangeStart && seed <= item.srcRangeStart + item.rangeLen) {
-  //         return item.destRangeStart + (seed - item.srcRangeStart)
-  //       }
-  //       return seed
-  //     })
-  //   })
-  //   return newSeed
-  // })
+  const locationNumbers = seeds.map((seed) => {
+    let number = seed
+    almanac.forEach((group) => {
+      for (const item of group) {
+        const start = item.srcRangeStart
+        const end = item.srcRangeStart + item.rangeLen
+        if (isBetween(number, [start, end])) {
+          number = item.destRangeStart + (number - item.srcRangeStart)
+          break
+        }
+      }
+    })
+    return number
+  })
 
-  return almanac
+  return Math.min(...locationNumbers)
 }
-
-console.log(part1())
