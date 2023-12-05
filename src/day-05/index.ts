@@ -16,13 +16,6 @@ const parseAlmanac = (maps: string[][]) => {
   return maps
     .map((map) => map.slice(1))
     .map((values) => values.map((str) => str.split(' ').map(Number)))
-    .map((group) => {
-      return group.map(([destRangeStart, srcRangeStart, rangeLen]) => ({
-        destRangeStart,
-        srcRangeStart,
-        rangeLen,
-      }))
-    })
 }
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -38,12 +31,12 @@ export const part1 = () => {
   const locationNumbers = seeds.map((seed) => {
     let number = seed
     almanac.forEach((group) => {
-      for (const item of group) {
-        const start = item.srcRangeStart
-        const end = item.srcRangeStart + item.rangeLen
+      for (const [destRangeStart, srcRangeStart, rangeLen] of group) {
+        const start = srcRangeStart
+        const end = srcRangeStart + rangeLen
 
         if (isBetween(number, [start, end])) {
-          number = item.destRangeStart + (number - item.srcRangeStart)
+          number = destRangeStart + (number - srcRangeStart)
           break
         }
       }
@@ -64,42 +57,33 @@ export const part2 = () => {
 
   const almanac = parseAlmanac(maps)
 
-  const pairs = seeds.reduce((acc, seed, index) => {
+  // [start, end], inclusive
+  const pairs: [number, number][] = seeds.reduce((acc, seed, index) => {
     if (index % 2 === 0) {
       acc.push([seed, seeds.at(index + 1)!])
     }
     return acc
   }, [] as [number, number][])
+    .map(([start, len]) => [start, start + len])
 
-  const allSeeds = pairs.reduce((acc, [start, len]) => {
-    const numbers = Array.from({ length: len }, (_, i) => start + i)
-    return [...acc, ...numbers]
-  }, [] as number[])
-
-  console.log('pairs :', pairs)
-
-  // get interesected values, by providing first start and end, and last start and end
-  const getIntersected = (start1: number, end1: number, start2: number, end2: number) => {
-    const start = Math.max(start1, start2)
-    const end = Math.min(end1, end2)
-    return Array.from({ length: end - start + 1 }, (_, i) => start + i)
-  }
-
-  const locationNumbers = allSeeds.map((seed) => {
-    let number = seed
-    almanac.forEach((group) => {
-      for (const item of group) {
-        const start = item.srcRangeStart
-        const end = item.srcRangeStart + item.rangeLen
-
-        if (isBetween(number, [start, end])) {
-          number = item.destRangeStart + (number - item.srcRangeStart)
-          break
+  let lowest = Number.POSITIVE_INFINITY
+  for (const [min, max] of pairs) {
+    for (let n = min; n <= max; n++) {
+      let number = n
+      for (const group of almanac) {
+        for (const [destRangeStart, srcRangeStart, rangeLen] of group) {
+          if (isBetween(number, [srcRangeStart, srcRangeStart + rangeLen])) {
+            number = destRangeStart + (number - srcRangeStart)
+            break
+          }
         }
       }
-    })
-    return number
-  })
 
-  return Math.min(...locationNumbers)
+      if (number < lowest) {
+        lowest = number
+      }
+    }
+  }
+
+  return lowest
 }
