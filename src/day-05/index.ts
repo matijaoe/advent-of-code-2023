@@ -67,7 +67,8 @@ export const part2 = () => {
     .map(([start, len]) => [start, start + len])
 
   let lowest = Number.POSITIVE_INFINITY
-  for (const [min, max] of pairs) {
+  for (const [idx, [min, max]] of pairs.entries()) {
+    console.log('group:', idx + 1, new Intl.NumberFormat('en-US').format(max - min))
     for (let n = min; n <= max; n++) {
       let number = n
       for (const group of almanac) {
@@ -87,3 +88,8 @@ export const part2 = () => {
 
   return lowest
 }
+
+/*
+🌲 Part One: 551761867 (1.04 ms)
+🎄 Part Two: 57451710 (3528383.59 ms) - too high 🥺
+*/
